@@ -4,10 +4,10 @@ import { departmentData } from '../../data/mockData';
 
 export default function DepartmentChart() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-sm border border-orange-200 dark:border-gray-700 p-6">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Interns per Department</h3>
-        <p className="text-sm text-gray-600 mt-1">Distribution across different departments</p>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Interns per Department</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Distribution across different departments</p>
       </div>
       
       <div className="h-80">
@@ -34,9 +34,9 @@ export default function DepartmentChart() {
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
               }}
             />
-            <Bar 
-              dataKey="interns" 
-              fill="#3b82f6" 
+            <Bar
+              dataKey="interns"
+              fill="#f97316"
               radius={[4, 4, 0, 0]}
               name="Interns"
             />

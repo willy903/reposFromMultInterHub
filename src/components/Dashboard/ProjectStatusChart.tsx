@@ -8,10 +8,10 @@ export default function ProjectStatusChart() {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-sm border border-orange-200 dark:border-gray-700 p-6">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Project Status Distribution</h3>
-        <p className="text-sm text-gray-600 mt-1">Current status of all projects</p>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Project Status Distribution</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Current status of all projects</p>
       </div>
       
       <div className="h-80">
@@ -45,11 +45,11 @@ export default function ProjectStatusChart() {
       <div className="flex justify-center space-x-6 mt-4">
         {projectStatusData.map((item, index) => (
           <div key={index} className="flex items-center">
-            <div 
+            <div
               className="w-3 h-3 rounded-full mr-2"
               style={{ backgroundColor: item.color }}
             />
-            <span className="text-sm text-gray-600">{item.name}</span>
+            <span className="text-sm text-gray-600 dark:text-gray-300">{item.name}</span>
           </div>
         ))}
       </div>

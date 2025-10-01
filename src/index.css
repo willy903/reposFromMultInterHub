@@ -6,14 +6,14 @@
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
   }
-  
+
   .dark body {
     background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
   }

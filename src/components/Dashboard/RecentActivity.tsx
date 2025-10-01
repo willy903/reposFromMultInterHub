@@ -44,17 +44,17 @@ export default function RecentActivity() {
               />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center space-x-2">
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {activity.user.name}
                   </p>
                   <div className={`p-1 rounded-full ${colorClass}`}>
                     <Icon className="h-3 w-3" />
                   </div>
                 </div>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                   {activity.action}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {activity.timestamp}
                 </p>
               </div>

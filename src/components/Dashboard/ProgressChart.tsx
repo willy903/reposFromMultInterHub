@@ -4,10 +4,10 @@ import { progressData } from '../../data/mockData';
 
 export default function ProgressChart() {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-sm border border-orange-200 dark:border-gray-700 p-6">
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Intern Progress Over Time</h3>
-        <p className="text-sm text-gray-600 mt-1">Average progress and performance metrics</p>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Intern Progress Over Time</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Average progress and performance metrics</p>
       </div>
       
       <div className="h-80">
@@ -31,20 +31,20 @@ export default function ProgressChart() {
                 boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
               }}
             />
-            <Line 
-              type="monotone" 
-              dataKey="progress" 
-              stroke="#3b82f6" 
+            <Line
+              type="monotone"
+              dataKey="progress"
+              stroke="#f97316"
               strokeWidth={3}
-              dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
+              dot={{ fill: '#f97316', strokeWidth: 2, r: 4 }}
               name="Average Progress"
             />
-            <Line 
-              type="monotone" 
-              dataKey="performance" 
-              stroke="#10b981" 
+            <Line
+              type="monotone"
+              dataKey="performance"
+              stroke="#fb923c"
               strokeWidth={3}
-              dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
+              dot={{ fill: '#fb923c', strokeWidth: 2, r: 4 }}
               name="Top Performers"
             />
           </LineChart>

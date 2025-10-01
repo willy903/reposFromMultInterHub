@@ -1,6 +1,6 @@
 import React from 'react';
-import { useState } from 'react';
-import { Bell, Search, ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Bell, Search, ChevronDown, CheckCircle, AlertTriangle, Info } from 'lucide-react';
 import { mockNotifications } from '../../data/mockData';
 import NotificationModal from '../Modals/NotificationModal';
 import SearchModal from '../Modals/SearchModal';
@@ -10,12 +10,28 @@ export default function Header() {
   const [showSearch, setShowSearch] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const unreadCount = mockNotifications.filter(n => !n.read).length;
+  const notificationRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
+      }
+    };
+
+    if (showNotifications) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showNotifications]);
 
   return (
     <>
     <header className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-100 dark:border-gray-800 px-4 md:px-6 py-4 fixed top-0 right-0 md:left-64 left-0 z-20">
       <div className="flex items-center justify-between">
-        {/* Search */}
         <div className="flex-1 max-w-md hidden md:block ml-12 md:ml-0">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 h-4 w-4" />
@@ -29,19 +45,16 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Right side */}
         <div className="flex items-center space-x-4">
-          {/* Mobile search button */}
-          <button 
+          <button
             onClick={() => setShowSearch(true)}
             className="md:hidden p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200"
           >
             <Search className="h-5 w-5" />
           </button>
-          
-          {/* Notifications */}
-          <div className="relative">
-            <button 
+
+          <div className="relative" ref={notificationRef}>
+            <button
               onClick={() => setShowNotifications(!showNotifications)}
               className="relative p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-all duration-200"
             >
@@ -52,17 +65,15 @@ export default function Header() {
                 </span>
               )}
             </button>
-            
-            {/* Notification Dropdown */}
+
             {showNotifications && (
               <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg z-50 max-h-96 overflow-hidden">
                 <div className="p-4 border-b border-gray-200 dark:border-gray-700">
                   <div className="flex items-center justify-between">
                     <h3 className="font-semibold text-gray-900 dark:text-white">Notifications</h3>
-                    <button 
+                    <button
                       onClick={() => {
                         console.log('Mark all as read');
-                        setShowNotifications(false);
                       }}
                       className="text-xs text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300"
                     >
@@ -70,7 +81,7 @@ export default function Header() {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="max-h-80 overflow-y-auto">
                   {mockNotifications.map((notification) => (
                     <div key={notification.id} className={`p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors ${!notification.read ? 'bg-orange-50 dark:bg-orange-900/20' : ''}`}>
@@ -96,9 +107,9 @@ export default function Header() {
                     </div>
                   ))}
                 </div>
-                
+
                 <div className="p-3 border-t border-gray-200 dark:border-gray-700">
-                  <button 
+                  <button
                     onClick={() => setShowNotifications(false)}
                     className="w-full text-center text-sm text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium"
                   >

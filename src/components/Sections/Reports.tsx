@@ -1,9 +1,128 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FileText, Download, Calendar, TrendingUp, BarChart3, PieChart } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
-import { progressData, departmentData } from '../../data/mockData';
+import { progressData, departmentData, mockInterns, mockProjects, mockTasks } from '../../data/mockData';
 
 export default function Reports() {
+  const [generatingReport, setGeneratingReport] = useState(false);
+
+  const generateGlobalReport = () => {
+    setGeneratingReport(true);
+
+    const totalInterns = mockInterns.length;
+    const activeInterns = mockInterns.filter(i => i.status === 'active').length;
+    const totalProjects = mockProjects.length;
+    const completedProjects = mockProjects.filter(p => p.status === 'done').length;
+    const totalTasks = mockTasks.length;
+    const completedTasks = mockTasks.filter(t => t.status === 'done').length;
+    const pendingTasks = mockTasks.filter(t => t.status === 'todo').length;
+    const inProgressTasks = mockTasks.filter(t => t.status === 'in-progress').length;
+    const bugTasks = mockTasks.filter(t => t.status === 'bug').length;
+
+    const reportContent = `
+RAPPORT GLOBAL DES STAGIAIRES
+Généré le: ${new Date().toLocaleString('fr-FR')}
+
+========================================
+RÉSUMÉ GLOBAL
+========================================
+
+STAGIAIRES:
+- Total: ${totalInterns}
+- Actifs: ${activeInterns}
+- Inactifs: ${totalInterns - activeInterns}
+
+PROJETS:
+- Total: ${totalProjects}
+- Terminés: ${completedProjects}
+- En cours: ${totalProjects - completedProjects}
+- Taux de complétion: ${Math.round((completedProjects / totalProjects) * 100)}%
+
+TÂCHES:
+- Total: ${totalTasks}
+- Terminées: ${completedTasks}
+- En cours: ${inProgressTasks}
+- En attente: ${pendingTasks}
+- Bugs: ${bugTasks}
+- Taux de complétion: ${Math.round((completedTasks / totalTasks) * 100)}%
+
+========================================
+DÉTAILS PAR STAGIAIRE
+========================================
+
+${mockInterns.map(intern => {
+  const internTasks = mockTasks.filter(t => t.assignedTo === intern.id);
+  const completedInternTasks = internTasks.filter(t => t.status === 'done').length;
+  const internProjects = mockProjects.filter(p => p.assignedInterns.includes(intern.id));
+
+  return `
+NOM: ${intern.name}
+Email: ${intern.email}
+Département: ${intern.department}
+Statut: ${intern.status === 'active' ? 'Actif' : 'Inactif'}
+Progression: ${intern.progress}%
+Tâches assignées: ${internTasks.length}
+Tâches terminées: ${completedInternTasks}
+Projets assignés: ${internProjects.length}
+`;
+}).join('\n---\n')}
+
+========================================
+DÉTAILS PAR PROJET
+========================================
+
+${mockProjects.map(project => {
+  const projectTasks = mockTasks.filter(t => t.projectId === project.id);
+  const completedProjectTasks = projectTasks.filter(t => t.status === 'done').length;
+  const pendingProjectTasks = projectTasks.filter(t => t.status === 'todo').length;
+  const inProgressProjectTasks = projectTasks.filter(t => t.status === 'in-progress').length;
+  const bugProjectTasks = projectTasks.filter(t => t.status === 'bug').length;
+
+  return `
+PROJET: ${project.title}
+Statut: ${project.status === 'done' ? 'Terminé' : project.status === 'in-progress' ? 'En cours' : 'En attente'}
+Complétion: ${project.completion}%
+Échéance: ${new Date(project.dueDate).toLocaleDateString('fr-FR')}
+Stagiaires assignés: ${project.assignedInterns.length}
+
+TÂCHES:
+- Total: ${projectTasks.length}
+- Terminées: ${completedProjectTasks}
+- En cours: ${inProgressProjectTasks}
+- En attente: ${pendingProjectTasks}
+- Bugs: ${bugProjectTasks}
+`;
+}).join('\n---\n')}
+
+========================================
+CONCLUSION
+========================================
+
+Taux de réussite global: ${Math.round((completedTasks / totalTasks) * 100)}%
+Performance des stagiaires: Bonne
+Recommandations: Continuer le suivi régulier des tâches et projets.
+
+========================================
+FIN DU RAPPORT
+========================================
+    `;
+
+    const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Rapport_Global_${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    setTimeout(() => {
+      setGeneratingReport(false);
+      alert('Rapport généré avec succès!');
+    }, 1000);
+  };
+
   const reports = [
     {
       id: 1,
@@ -195,11 +314,22 @@ export default function Reports() {
         <div className="p-6 border-b border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-gray-900 dark:text-white">Rapports Disponibles</h3>
-            <button 
-              onClick={() => console.log('Générer un nouveau rapport')}
-              className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors text-sm"
+            <button
+              onClick={generateGlobalReport}
+              disabled={generatingReport}
+              className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all duration-200 text-sm font-medium shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
             >
-              Générer un Nouveau Rapport
+              {generatingReport ? (
+                <>
+                  <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                  <span>Génération...</span>
+                </>
+              ) : (
+                <>
+                  <FileText className="h-4 w-4" />
+                  <span>Générer un Nouveau Rapport</span>
+                </>
+              )}
             </button>
           </div>
         </div>

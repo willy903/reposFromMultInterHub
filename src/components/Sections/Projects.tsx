@@ -43,15 +43,14 @@ export default function Projects() {
 
   return (
     <div className="space-y-6 mt-0 md:mt-[90px]">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Projets</h2>
           <p className="text-gray-600 dark:text-gray-300 mt-1">Suivre et gérer les projets des stagiaires</p>
         </div>
-        <button 
+        <button
           onClick={() => setShowForm(true)}
-          className="mt-4 sm:mt-0 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all duration-200 flex items-center space-x-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+          className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-2 rounded-lg hover:from-orange-600 hover:to-red-600 transition-all duration-200 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:scale-105 w-full sm:w-auto"
         >
           <Plus className="h-4 w-4" />
           <span>Nouveau Projet</span>

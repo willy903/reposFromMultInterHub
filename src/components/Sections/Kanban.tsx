@@ -246,29 +246,36 @@ export default function Kanban() {
         </div>
       </div>
 
-      {/* Project Info */}
       {selectedProjectData && (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{selectedProjectData.title}</h3>
               <p className="text-gray-600 dark:text-gray-300 mt-1">
-                {selectedProjectData.assignedInterns.length} stagiaires assignés • 
+                {selectedProjectData.assignedInterns.length} stagiaires assignés •
                 Échéance: {new Date(selectedProjectData.dueDate).toLocaleDateString()}
               </p>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold text-gray-900 dark:text-white">{selectedProjectData.completion}%</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                {Math.round((doneTasks.length / Math.max(projectTasks.length, 1)) * 100)}%
+              </div>
               <div className="text-sm text-gray-500 dark:text-gray-400">Complété</div>
             </div>
           </div>
-          
+
           <div className="mt-4">
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div 
-                className="bg-orange-500 h-2 rounded-full transition-all duration-300"
-                style={{ width: `${selectedProjectData.completion}%` }}
+              <div
+                className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${(doneTasks.length / Math.max(projectTasks.length, 1)) * 100}%` }}
               />
+            </div>
+            <div className="flex items-center justify-between mt-2 text-xs text-gray-600 dark:text-gray-400">
+              <span>Terminé: {doneTasks.length}</span>
+              <span>En cours: {inProgressTasks.length}</span>
+              <span>En attente: {todoTasks.length}</span>
+              <span>Bug: {bugTasks.length}</span>
             </div>
           </div>
         </div>
